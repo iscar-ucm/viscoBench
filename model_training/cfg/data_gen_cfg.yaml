@@ -1,6 +1,6 @@
 t_sim: 5 # In seconds
-t_points: 1000
-N: 100 # Number of simulations per case
+t_points: 500
+N: 500 # Number of simulations per case
 rand_visc: True
 visc_range: [0.8e-4, 0.9e-4]
 temp_C: 25.5 # If rand_visc == False

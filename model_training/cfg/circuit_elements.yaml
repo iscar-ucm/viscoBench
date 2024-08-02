@@ -29,7 +29,7 @@ elements: {
         E: 10.0e+6,
         t: 0.75e-3,
         beta: 2.5e+9,
-        e_sources: ["L"],
+        e_sources: [],
         e: {
             D_e: 0.0,
             L_e: 0.5e-2

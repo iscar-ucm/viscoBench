@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 if __name__ == "__main__":
     # Paths
-    datapath = "data/dataset01"
+    datapath = "data/dataset02"
     cfg_path = "cfg/training_cfg.yaml"
     output_path = "models"
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     ann_model.compile(optimizer=optimizer, loss=cfg["loss_fn"])
 
     print("Starting training..")
-    ann_model.fit(X_train, Y_train, epochs=cfg["epochs"], batch_size=16, 
+    ann_model.fit(X_train, Y_train, epochs=cfg["epochs"], batch_size=cfg["batch_size"], 
                   validation_data=(X_test,Y_test))
     print("Done.")
 

@@ -1,3 +1,4 @@
 loss_fn: "mse"
 lr: 1.0e-4
-epochs: 20
+batch_size: 32
+epochs: 75

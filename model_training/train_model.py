@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 if __name__ == "__main__":
     # Paths
-    datapath = "data/dataset02"
+    datapath = "data/dataset04_alpha"
     cfg_path = "cfg/training_cfg.yaml"
     output_path = "models"
 
@@ -39,27 +39,49 @@ if __name__ == "__main__":
     Y_train = np.transpose(np.transpose(Y_train)[0])
 
     # Define the model
-    ann_model = tf.keras.Sequential(
-        [
-            tf.keras.layers.Input( shape=X_train[0].shape[-3:] ),
-            tf.keras.layers.Bidirectional(
-                tf.keras.layers.GRU(20, activation="relu",
-                                    recurrent_activation='leaky_relu',
-                                    recurrent_dropout=0.1,
-                                    return_sequences=True),
-            ),
-            tf.keras.layers.Bidirectional(
-                tf.keras.layers.GRU(20, activation="relu",
-                                    recurrent_activation='leaky_relu',
-                                    recurrent_dropout=0.1)),
-            tf.keras.layers.Dense(20, activation="leaky_relu"),
-            tf.keras.layers.Dropout(0.01),
-            tf.keras.layers.Dense(1)
-        ]
-    )
+    if cfg["model"] == "lstm":
+        ann_model = tf.keras.Sequential(
+            [
+                tf.keras.layers.Input( shape=X_train[0].shape[-3:] ),
+                tf.keras.layers.Bidirectional(
+                    tf.keras.layers.GRU(30, activation="relu",
+                                        recurrent_activation='leaky_relu',
+                                        recurrent_dropout=0.05,
+                                        return_sequences=True),
+                ),
+                tf.keras.layers.Bidirectional(
+                    tf.keras.layers.GRU(30, activation="relu",
+                                        recurrent_dropout=0.05,
+                                        recurrent_activation='leaky_relu')),
+                tf.keras.layers.Dense(20, activation="tanh"),
+                tf.keras.layers.Dropout(0.01),
+                tf.keras.layers.Dense(1)
+            ]
+        )
+    elif cfg["model"] == "cnn":
+        X_test = X_test.reshape(*X_test.shape, 1)
+        X_train = X_train.reshape(*X_train.shape, 1)
+        print(np.shape(X_test))
+        # Y_test = Y_test.reshape(*Y_test.shape, 1)
+        # Y_train = Y_train.reshape(*Y_train.shape, 1)
+
+        ann_model = tf.keras.Sequential(
+            [
+                tf.keras.layers.Input( shape=X_train[0].shape[-3:] ),
+                tf.keras.layers.Reshape((40, 25, 1)),
+                tf.keras.layers.Conv2D(32, (3,3), activation="leaky_relu",
+                                       input_shape=(500, 2)),
+                tf.keras.layers.MaxPooling2D((2, 2)),
+                tf.keras.layers.Conv2D(64, (3,3), activation="leaky_relu"),
+                tf.keras.layers.Flatten(),
+                tf.keras.layers.Dense(20, activation="leaky_relu"),
+                tf.keras.layers.Dropout(0.01),
+                tf.keras.layers.Dense(1)
+            ]
+        )
     print(ann_model.summary())
 
-    optimizer = tf.keras.optimizers.legacy.Adam(learning_rate=cfg["lr"])
+    optimizer = tf.keras.optimizers.Adam(learning_rate=cfg["lr"])
     ann_model.compile(optimizer=optimizer, loss=cfg["loss_fn"])
 
     print("Starting training..")
@@ -69,4 +91,4 @@ if __name__ == "__main__":
 
     today = datetime.now()
     modelpath = output_path + today.strftime("/model_%Y_%m_%d_%H_%M")
-    ann_model.save(modelpath + '.model')
+    ann_model.export(modelpath + '.model')

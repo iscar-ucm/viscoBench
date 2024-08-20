@@ -1,0 +1,15 @@
+This is a test dataset produced with six conditions:
+
+    {sig: constant_signal, noise: 0.0},
+    {sig: constant_signal, noise: 0.04},
+    {sig: sinusoidal_signal, noise: 0.0},
+    {sig: sinusoidal_signal, noise: 0.04},
+    {sig: triangular_signal, noise: 0.0},
+    {sig: triangular_signal, noise: 0.04}
+
+performing 100 simulations for each case, 1000 samples for each simulation.
+The parasite capacitance has also been varies in length.
+
+The input data is normalized, between 0.0 and 1.0. It is recommended to 
+transform the data into the range -1.0, 1.0 so it is easier for the model to
+learn from it. The output data is not normalized at all.

@@ -1,4 +1,5 @@
+model: "cnn"
 loss_fn: "mse"
 lr: 1.0e-4
 batch_size: 32
-epochs: 75
+epochs: 25

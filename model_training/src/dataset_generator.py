@@ -7,6 +7,8 @@ from datetime import datetime
 from tqdm import tqdm
 from scipy.integrate import solve_ivp
 
+from sklearn.preprocessing import MinMaxScaler
+
 import src.input_signals as insig
 
 
@@ -60,16 +62,40 @@ class DatasetGenerator:
     
     def _save_data(self, X, Y, output_path):
         today = datetime.now()
-        datafolder = output_path + today.strftime("/dataset_%Y_%m_%d_%H_%M")
+        self.datafolder = output_path + today.strftime("/dataset_%Y_%m_%d_%H_%M")
         
         if not os.path.exists(output_path):
             os.mkdir( output_path )
-        if not os.path.exists(datafolder):
-            os.mkdir( datafolder )
+        if not os.path.exists(self.datafolder):
+            os.mkdir( self.datafolder )
 
         # Save as numpy binary files
-        np.save(datafolder+"/X_samples.npy", X)
-        np.save(datafolder+"/Y_samples.npy", Y)
+        np.save(self.datafolder+"/X_samples.npy", X)
+        np.save(self.datafolder+"/Y_samples.npy", Y)
+
+    def _save_format_cfg(self, X, Y, output_path):
+        """
+        It is assumed that self._save_data() has been called before so that
+        the folders are already created.
+        """
+        X = np.array(X)
+        Y = np.array(Y)
+        
+        scaler_in = MinMaxScaler()
+        scaler_out = MinMaxScaler()
+        scaler_in.fit_transform(X=X.reshape(-1, X.shape[-1]))
+        scaler_out.fit_transform(X=Y.reshape(-1, Y.shape[-1]))
+
+        norm_params = {}
+        norm_params["in"] = {}
+        norm_params["in"]["min"] = scaler_in.data_min_.tolist()
+        norm_params["in"]["range"] = scaler_in.data_range_.tolist()
+        norm_params["out"] = {}
+        norm_params["out"]["min"] = [scaler_out.data_min_.tolist()[0]]
+        norm_params["out"]["range"] = [scaler_out.data_range_.tolist()[0]]
+
+        with open(self.datafolder+"/model_cfg.yaml", 'w') as yaml_file:
+            yaml.dump(norm_params, stream=yaml_file, default_flow_style=None)
 
     def _calc_cil_resistance(self, D, L, visc):
         """
@@ -163,11 +189,16 @@ class DatasetGenerator:
 
                 # Value independent of RgC and sampling time
                 Z = sim_params["R2"]*sim_params["C2"]
-                a = (Z - (t[1]-t[0])) / Z
+                a = (t[1]-t[0]) / Z
 
                 # All required data to recover viscosity from "a" is stored as well
                 X.append( np.transpose([P1_t, P2_t]) )
                 Y.append( [a, visc, sim_params["R2"], sim_params["C2"], (t[1]-t[0])] )
 
+        # Save the data itself
         self._save_data(X, Y, output_path)
+
+        # Save the values for normalization
+        self._save_format_cfg(X, Y, output_path)
+
         print("Done.")

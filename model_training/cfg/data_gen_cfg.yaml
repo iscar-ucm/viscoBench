@@ -1,5 +1,5 @@
 t_sim: 5 # In seconds
-t_points: 500
+t_points: 2000 # This can be an integer or a list of two integers (range)
 N: 2000 # Number of simulations per case
 rand_visc: True
 visc_range: [0.79e-4, 0.91e-4]

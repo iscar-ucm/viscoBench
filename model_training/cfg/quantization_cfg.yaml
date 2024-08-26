@@ -1,0 +1,15 @@
+# Paths to data and models
+model_path: "models/lstm_2024_08_20_18_12.model"
+output_folder: "models/quantized"
+X_train_path: "data/dataset03_alpha_500samples/X_samples.npy"
+out_model_name: "converted"
+
+# Amount of data to be used as reference for the quantization
+samples: 250
+
+# Input/output is automatically converted from/to float type
+auto_in_quant: True
+auto_out_quant: True
+# Otherwise, input/output types must be specified
+input_type: "int8"
+output_type: "float32"

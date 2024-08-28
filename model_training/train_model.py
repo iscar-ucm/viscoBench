@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 if __name__ == "__main__":
     # Paths
-    datapath = "data/dataset04_alpha"
+    datapath = "data/dataset04_alpha_500samples"
     cfg_path = "cfg/training_cfg.yaml"
     output_path = "models"
 
@@ -43,17 +43,14 @@ if __name__ == "__main__":
         ann_model = tf.keras.Sequential(
             [
                 tf.keras.layers.Input( shape=X_train[0].shape[-3:] ),
-                tf.keras.layers.Bidirectional(
-                    tf.keras.layers.GRU(30, activation="relu",
-                                        recurrent_activation='leaky_relu',
-                                        recurrent_dropout=0.05,
-                                        return_sequences=True),
-                ),
-                tf.keras.layers.Bidirectional(
-                    tf.keras.layers.GRU(30, activation="relu",
-                                        recurrent_dropout=0.05,
-                                        recurrent_activation='leaky_relu')),
-                tf.keras.layers.Dense(20, activation="tanh"),
+                tf.keras.layers.LSTM(5, activation="relu",
+                                    recurrent_activation='sigmoid',
+                                    recurrent_dropout=0.05,
+                                    return_sequences=True),
+                tf.keras.layers.LSTM(5, activation="relu",
+                    recurrent_dropout=0.05,
+                    recurrent_activation='sigmoid'),
+                tf.keras.layers.Dense(10, activation="leaky_relu"),
                 tf.keras.layers.Dropout(0.01),
                 tf.keras.layers.Dense(1)
             ]
@@ -62,15 +59,13 @@ if __name__ == "__main__":
         X_test = X_test.reshape(*X_test.shape, 1)
         X_train = X_train.reshape(*X_train.shape, 1)
         print(np.shape(X_test))
-        # Y_test = Y_test.reshape(*Y_test.shape, 1)
-        # Y_train = Y_train.reshape(*Y_train.shape, 1)
 
         ann_model = tf.keras.Sequential(
             [
                 tf.keras.layers.Input( shape=X_train[0].shape[-3:] ),
                 tf.keras.layers.Reshape((40, 25, 1)),
                 tf.keras.layers.Conv2D(32, (3,3), activation="leaky_relu",
-                                       input_shape=(500, 2)),
+                                       input_shape=(40, 25, 1)),
                 tf.keras.layers.MaxPooling2D((2, 2)),
                 tf.keras.layers.Conv2D(64, (3,3), activation="leaky_relu"),
                 tf.keras.layers.Flatten(),

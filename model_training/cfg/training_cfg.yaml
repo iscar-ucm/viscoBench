@@ -1,5 +1,5 @@
-model: "cnn"
+model: "lstm"
 loss_fn: "mse"
 lr: 1.0e-4
 batch_size: 32
-epochs: 25
+epochs: 20

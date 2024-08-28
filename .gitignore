@@ -2,3 +2,4 @@ __pycache__/
 model_training/data/dataset04_alpha_500samples/
 model_training/data/dataset05_alpha_1000samples/
 model_training/data/dataset06_alpha_2000samples/
+model_training/data/dataset07_alpha_1500samples/

@@ -1,7 +1,10 @@
-import tensorflow as tf
-import numpy as np
 import os
 import yaml
+
+import numpy as np
+import tensorflow as tf
+
+from sklearn.preprocessing import MinMaxScaler
 
 
 if __name__ == "__main__":
@@ -15,12 +18,15 @@ if __name__ == "__main__":
 
     X_train = np.load(cfg["X_train_path"])
 
-    # TODO DO I NEED TO NORMALIZE THE INPUT DATA? I think so
+    # Normalization
+    scaler_in = MinMaxScaler()
+    X_norm = scaler_in.fit_transform(X=X_train.reshape(-1, X_train.shape[-1]))
+    X_norm = X_norm.reshape(X_train.shape)
 
     # Get some representative data for the conversion
     def representative_data_gen():
         for input_value in \
-            tf.data.Dataset.from_tensor_slices(X_train).batch(1).take(cfg["samples"]):
+            tf.data.Dataset.from_tensor_slices(X_norm).batch(10).take(cfg["samples"]):
             yield [np.float32(input_value)]
     
     converter = tf.lite.TFLiteConverter.from_saved_model( cfg["model_path"] )

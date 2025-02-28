@@ -6,21 +6,21 @@ elements: {
     R0_params: {
         D: 500.0e-6,
         L: 125.0e-2, # 25.0e-2
-        e_sources: [],
+        e_sources: ["L"],
         e: {
             D_e: 50.0e-6,
-            L_e: 1.0e-3
+            L_e: 25.0e-2
         }
     },
 
     # First RC Branch
     R1_params: {
-        D: 150.0e-6,
+        D: 100.0e-6,
         L: 10.0e-2,
         e_sources: [],
         e: {
             D_e: 15.0e-6,
-            L_e: 1.0e-3
+            L_e: 1.0e-2
         }
     },
     C1_params: {
@@ -29,7 +29,7 @@ elements: {
         E: 10.0e+6,
         t: 0.75e-3,
         beta: 2.5e+9,
-        e_sources: [],
+        e_sources: ["L"],
         e: {
             D_e: 0.0,
             L_e: 0.5e-2
@@ -38,7 +38,7 @@ elements: {
 
     # Second RC branch
     R2_params: {
-        D: 150.0e-6,
+        D: 100.0e-6,
         L: 10.0e-2,
         e_sources: [],
         e: {
@@ -48,7 +48,7 @@ elements: {
     },
     C2_params: {
         D: 2.0e-3,
-        L: 10.0e-2,
+        L: 20.0e-2,
         E: 10.0e+6,
         t: 0.75e-3,
         beta: 2.5e+9,

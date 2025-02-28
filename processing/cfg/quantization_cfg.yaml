@@ -1,12 +1,21 @@
 # Paths to data and models
-model_path: "models/lstm_2024_08_28_16_48.model"
-# model_path: "models/cnn_2024_08_28_12_33.model"
+# model_path: "models/cnn_500pt.model"
+# model_path: "models/cnn_1000pt.model"
+# model_path: "models/cnn_1500pt.model"
+# model_path: "models/cnn_lstm_500pt.model"
+# model_path: "models/cnn_lstm_1000pt.model"
+model_path: "models/cnn_lstm_1500pt.model"
+
 output_folder: "models/quantized"
-X_train_path: "data/dataset04_alpha_500samples/X_samples.npy"
+
+# X_train_path: "data/dataset01_500pt_definitive_edition/X_samples.npy"
+# X_train_path: "data/dataset02_1000pt_definitive_edition/X_samples.npy"
+X_train_path: "data/dataset03_1500pt_definitive_edition/X_samples.npy"
+
 out_model_name: "converted"
 
 # Amount of data to be used as reference for the quantization
-samples: 250
+samples: 4000
 
 # Input/output is automatically converted from/to float type
 auto_in_quant: True

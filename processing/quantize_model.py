@@ -18,10 +18,15 @@ if __name__ == "__main__":
 
     X_train = np.load(cfg["X_train_path"])
 
+    with open(cfg["model_path"]+"\model_cfg.yaml") as model_cfg_f:
+        model_cfg = yaml.safe_load(model_cfg_f)
+    
     # Normalization
-    scaler_in = MinMaxScaler()
-    X_norm = scaler_in.fit_transform(X=X_train.reshape(-1, X_train.shape[-1]))
-    X_norm = X_norm.reshape(X_train.shape)
+    X_norm = np.multiply(np.divide(X_train, np.subtract(model_cfg["max_X"], model_cfg["min_X"])),
+                           model_cfg["norm_X_range"]) + model_cfg["norm_X_offset"]
+    # scaler_in = MinMaxScaler()
+    # X_norm = scaler_in.fit_transform(X=X_train.reshape(-1, X_train.shape[-1]))
+    # X_norm = X_norm.reshape(X_train.shape)
 
     # Get some representative data for the conversion
     def representative_data_gen():

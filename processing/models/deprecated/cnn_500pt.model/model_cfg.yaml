@@ -1,0 +1,21 @@
+augment_data: false
+batch_size: 128
+datapath: data/dataset01_definitive_edition
+epochs: 500
+in_points: 500
+loss_fn: mse
+lr: 0.0001
+max_X: [1.15, 1.15, 360.0]
+max_Y: 8.5
+min_X: [0.0, 0.0, 0.0]
+min_Y: 1.0
+model: 1d-cnn
+norm_X_offset: [-0.5, -0.5, -0.5]
+norm_X_range: [1.5, 1.5, 1.5]
+norm_Y_offset: -0.5
+norm_Y_range: 1.5
+offset_val: 0.15
+out_col: 1
+output_path: models
+scale_val_down: 0.4
+scale_val_up: 0.15

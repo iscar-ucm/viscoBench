@@ -1,5 +1,33 @@
-model: "lstm"
+# Paths
+# datapath: "data/dataset01_500pt_definitive_edition"
+# datapath: "data/dataset02_1000pt_definitive_edition"
+datapath: "data/dataset03_1500pt_definitive_edition"
+output_path: "models"
+
+# Model: "lstm", "1d-cnn" or "cnn"
+model: "1d-cnn"
+in_points: 1500
+
+# Normalization
+min_X: [0.0, 0.0, 0.0]
+max_X: [1.15, 1.15, 360.0]
+norm_X_range: [1.5, 1.5, 1.5]
+norm_X_offset: [-0.5, -0.5, -0.5]
+
+out_col: 1
+min_Y: 1.0 # 0.0055
+max_Y: 8.5 # 0.0277
+norm_Y_range: 1.5
+norm_Y_offset: -0.5
+
+# Percentage of random offset for P1
+augment_data: False
+offset_val: 0.15
+scale_val_up: 0.15
+scale_val_down: 0.4
+
+# Training Hyper-Parameters
 loss_fn: "mse"
 lr: 1.0e-4
-batch_size: 32
-epochs: 20
+batch_size: 128
+epochs: 500

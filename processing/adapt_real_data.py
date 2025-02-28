@@ -1,3 +1,12 @@
+"""
+    Usage examples:
+
+        python adapt_real_data.py "data/validation/Ethanol_70pc" 1000
+
+        python adapt_real_data.py "data/validation/IPA_100pc" 1000 1500
+
+"""
+
 import pandas as pd 
 import numpy as np
 import sys, os
@@ -35,15 +44,21 @@ class user_inputer:
 
 
 def adapt_data_format():
-    if len(sys.argv) != 3:
+    if len(sys.argv) < 3:
         print("Data folder and out sampling points must be specified.")
         exit()
     datapath = sys.argv[1]
-    n_out_points = int(sys.argv[2])
+
+    n_out_points = []
+    for i in range(2, len(sys.argv)):
+        n_out_points.append( int(sys.argv[i]) )
+    X = [[] for _ in range(len(n_out_points))]
+    Y = [[] for _ in range(len(n_out_points))]
+    incT = [[] for _ in range(len(n_out_points))]
     data_cols = ["Time [s]", "P1(Read)[mbar]", "P2(Read)[mbar]"]
     u_inputer = user_inputer()
-    X, Y = [], []
-    incT = []
+    
+    print("Getting data and interpolating sequences to {} points.".format(n_out_points))
 
     # Gather all the files' names
     files = []
@@ -101,22 +116,25 @@ def adapt_data_format():
             # Interpolate data
             f1 = interpolate.interp1d(t[idx_start:idx_end], p1[idx_start:idx_end])
             f2 = interpolate.interp1d(t[idx_start:idx_end], p2[idx_start:idx_end])
-            itp_t = np.linspace(t[idx_start], t[idx_end-1], n_out_points)
-            # Append the signals to a numpy array as well as viscosity and period
-            X.append( np.transpose([f1(itp_t), f2(itp_t)]) )
-            Y.append( row["viscosity"] )
-            incT.append( itp_t[1]-itp_t[0] )
+            for idx, n_points in enumerate(n_out_points):
+                itp_t = np.linspace(t[idx_start], t[idx_end-1], n_points)
+                # Append the signals to a numpy array as well as viscosity and period
+                X[idx].append( np.transpose([f1(itp_t), f2(itp_t)]) )
+                Y[idx].append( row["viscosity"] )
+                incT[idx].append( itp_t[1]-itp_t[0] )
     
     # Save the data as numpy X and Y matrices
-    if not os.path.exists(datapath + "/processed"):
-        os.mkdir( datapath + "/processed" )
+    for idx, n_points in enumerate(n_out_points):
+        foldername = "/processed_{}pt".format(n_points)
+        if not os.path.exists(datapath + foldername):
+            os.mkdir( datapath + foldername )
 
-    with open(datapath + "/processed/metadata.txt", "w") as f: 
-        f.write("Origin folder: {}\n".format(datapath))
-        f.write("N samples: {}\n".format(n_out_points))
-    np.save(datapath + "/processed/X_samples.npy", X)
-    np.save(datapath + "/processed/Y_samples.npy", Y)
-    np.save(datapath + "/processed/incT_samples.npy", incT)
+        with open(datapath + foldername + "/metadata.txt", "w") as f: 
+            f.write("Origin folder: {}\n".format(datapath))
+            f.write("N samples: {}\n".format(n_points))
+        np.save(datapath + foldername + "/X_samples.npy", X[idx])
+        np.save(datapath + foldername + "/Y_samples.npy", Y[idx])
+        np.save(datapath + foldername + "/incT_samples.npy", incT[idx])
 
 
 if __name__ == "__main__":

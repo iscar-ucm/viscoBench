@@ -1,0 +1,3 @@
+The original data used in the research can be found at Zenodo repository: https://doi.org/10.5281/zenodo.14811968
+
+Download and unzip the datasets in this folder. You can also take the ANN models there uploaded and place them in the `models` folder in case that they are not found with this code version. Feel free to drop a message if you have some trouble placing the data. You can find the corresponding author email in the original research paper. Best, Juan.

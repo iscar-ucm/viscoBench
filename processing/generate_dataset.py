@@ -1,4 +1,4 @@
-from src.dataset_generator import DatasetGenerator
+from src.simulator import SystemSimulator
 
 
 if __name__ == "__main__":
@@ -6,7 +6,7 @@ if __name__ == "__main__":
     cfg_path = "cfg/data_gen_cfg.yaml"
     output_path = "data"
 
-    generator = DatasetGenerator()
+    generator = SystemSimulator()
     generator.load_values(circuit_path)
     generator.load_conditions(cfg_path)
 

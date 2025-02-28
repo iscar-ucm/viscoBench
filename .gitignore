@@ -1,6 +1,5 @@
 __pycache__/
-processing/data/dataset04_alpha_500samples/
-processing/data/dataset05_alpha_1000samples/
-processing/data/dataset06_alpha_2000samples/
-processing/data/dataset07_alpha_1500samples/
-Ethanol_70pc/
+processing/data/dataset01_500pt/
+processing/data/dataset02_1000pt/
+processing/data/dataset03_1500pt/
+validation/

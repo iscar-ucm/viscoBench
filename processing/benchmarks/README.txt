@@ -1,0 +1,3 @@
+The benchmarks used for Figure 10 in the original paper are the ones simply denoted as "Experimental_XXXXpt.csv", where the calibration values were used for the estimate of the viscosity for the experimental data.
+
+The files named like "Experimental_XXXXpt_th.csv" correspond to the same analysis but using the expected theoretical values of R1, R2 and C according to their dimensions. This was a test to validate the improvement linked to the calibration of the prototype. 

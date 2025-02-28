@@ -1,17 +1,27 @@
-t_sim: 5 # In seconds
+t_sim: 360 # In seconds
+# Time length of sequence is calculated: t_sim / N_segments
+# With N_segments = random_in(segments_range)
+segments_range: [1, 8]
+sliding_points: 750 # Approx half of t_points
 t_points: 1500 # This can be an integer or a list of two integers (range)
 N: 2000 # Number of simulations per case
 rand_visc: True
-visc_range: [0.79e-4, 0.91e-4]
+inc_t: True
+visc_range: [0.75e-3, 2.3e-3]
 temp_C: 25.5 # If rand_visc == False
+A_range: [0.3, 1.0]
+offset_range: [0.0, 0.3]
+k_range: [0.015, 0.03] # Frequency Related
 
 # For each of the following conditions, N simulations
 # are performed
 sim_conditions: [
-    {sig: constant_signal, noise: 0.0},
-    {sig: constant_signal, noise: 0.04},
+    {sig: step_signal, noise: 0.0},
+    {sig: step_signal, noise: 0.025},
     {sig: sinusoidal_signal, noise: 0.0},
-    {sig: sinusoidal_signal, noise: 0.04},
+    {sig: sinusoidal_signal, noise: 0.025},
     {sig: triangular_signal, noise: 0.0},
-    {sig: triangular_signal, noise: 0.04}
+    {sig: triangular_signal, noise: 0.025},
+    {sig: db5_signal, noise: 0.0},
+    {sig: db5_signal, noise: 0.025}
 ]
